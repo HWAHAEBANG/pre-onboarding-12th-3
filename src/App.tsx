@@ -6,7 +6,7 @@ import { Cache } from "./types/customCacheType";
 
 function App() {
   const [cache, setCache] = useState<Cache>({});
-  const defaultTTL = 3600; // 기본 캐시 유효 시간 (초)
+  const defaultTTL = 3600; // 기본 캐시 유효 시간
 
   // 캐시에 데이터 추가
   const set = (key: string, value: Suggestions, ttl = defaultTTL) => {
