@@ -32,15 +32,15 @@ const SearchBar = () => {
     if (isolatedKoreanCharacterValidator(inputValue)) return;
     //====
     // 캐시에서 데이터 조회
-    const cachedData = cacheContextValue?.get(searchKeyword);
+    const cachedData = cacheContextValue?.get(inputValue);
 
     if (cachedData) {
       console.info("Data found in cache");
-      return { data: cachedData };
+      setSuggestions(cachedData);
     } else {
-      const response = await getSuggestionApi(searchKeyword);
+      const response = await getSuggestionApi(inputValue);
       const data = response.data;
-      cacheContextValue?.set(searchKeyword, data);
+      cacheContextValue?.set(inputValue, data);
       setSuggestions(data);
     }
   };
@@ -94,7 +94,6 @@ const SearchBar = () => {
           setFocusIndex((prev) => prev + 1);
           setSearchKeyword(suggestions[focusIndex + 1].sickNm);
         }
-
         break;
       case "Escape":
         CloseSuggestionBox();
@@ -117,7 +116,7 @@ const SearchBar = () => {
           onKeyDown={moveFocus}
           placeholder="질환명을 입력해 주세요."
         />
-        <StyledButton type="submit">🔍</StyledButton>
+        <SearchButton type="submit"><svg viewBox="0 0 16 16" fill="currentColor" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.56 0a6.56 6.56 0 015.255 10.49L16 14.674 14.675 16l-4.186-4.184A6.56 6.56 0 116.561 0zm0 1.875a4.686 4.686 0 100 9.372 4.686 4.686 0 000-9.372z"/></svg></SearchButton>
         <ClearButton onClick={clearSerchKeyword}>x</ClearButton>
         {suggestionBoxVisible ? (
           <SuggestionBox focusIndex={focusIndex} suggestions={suggestions} />
@@ -159,16 +158,18 @@ const StyledInput = styled.input`
   }
 `;
 
-const StyledButton = styled.button`
-  background-color: #cadded;
+const SearchButton = styled.button`
+  background-color: #007be9;
   position: absolute;
   right: 10px;
   top: 5px;
   width: 40px;
   height: 40px;
+  padding: 10px;
   border: none;
   border-radius: 50%;
-  font-size: 20px;
+  color: white;
+  cursor: pointer;
 `;
 
 const ClearButton = styled.div`
