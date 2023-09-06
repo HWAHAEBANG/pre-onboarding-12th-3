@@ -26,7 +26,7 @@ const SearchBar = () => {
 
   const changeSearchInputValue = async (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    OpenSuggestionBox();
+    setSuggestionBoxVisible(true);
     setSearchKeyword(inputValue);
     setFocusIndex(-1);
     if (isolatedKoreanCharacterValidator(inputValue)) return;
@@ -49,25 +49,14 @@ const SearchBar = () => {
     e.preventDefault();
     if (searchKeyword === "") return alert("검색어를 입력하세요.");
     alert(`검색: ${searchKeyword}`);
-    setSearchKeyword("");
-    setFocusIndex(-1);
-    CloseSuggestionBox();
-    setSuggestions([]);
+    clearSerchKeyword();
   };
 
   const clearSerchKeyword = () => {
     setSearchKeyword("");
     setFocusIndex(-1);
-    CloseSuggestionBox();
-    setSuggestions([]);
-  };
-
-  const OpenSuggestionBox = () => {
-    setSuggestionBoxVisible(true);
-  };
-
-  const CloseSuggestionBox = () => {
     setSuggestionBoxVisible(false);
+    setSuggestions([]);
   };
 
   const moveFocus = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -96,7 +85,7 @@ const SearchBar = () => {
         }
         break;
       case "Escape":
-        CloseSuggestionBox();
+        setSuggestionBoxVisible(false);
         setFocusIndex(0);
         break;
       default:
@@ -111,7 +100,7 @@ const SearchBar = () => {
           type="text"
           value={searchKeyword}
           onChange={changeSearchInputValue}
-          onFocus={OpenSuggestionBox}
+          onFocus={()=>setSuggestionBoxVisible(true)}
           // onBlur={CloseSuggestionBox}
           onKeyDown={moveFocus}
           placeholder="질환명을 입력해 주세요."
