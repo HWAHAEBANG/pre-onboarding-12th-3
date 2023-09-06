@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  FC,
-  KeyboardEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-} from "react";
+import { FC, useEffect, useRef } from "react";
 import { styled } from "styled-components";
 import { Suggestions } from "../types/searchType";
 
