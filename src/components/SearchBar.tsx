@@ -1,25 +1,48 @@
-import { ChangeEvent, FormEvent, KeyboardEvent, useState } from "react";
-import "./App.css";
+import {
+  ChangeEvent,
+  FormEvent,
+  KeyboardEvent,
+  useContext,
+  useState,
+} from "react";
 import { styled } from "styled-components";
 import { getSuggestionApi } from "../apis/suggestion";
 import { isolatedKoreanCharacterValidator } from "../utils/validator";
 import SuggestionBox from "../components/SuggestionBox";
 import { Suggestions } from "../types/searchType";
+import { CacheContextValue } from "../types/customCacheType";
+import { CustomCacheContext } from "../contexts/customCacheContext";
 
 const SearchBar = () => {
+  const cacheContextValue = useContext<CacheContextValue | undefined>(
+    CustomCacheContext,
+  );
+
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Suggestions>([]);
   const [focusIndex, setFocusIndex] = useState<number>(-1);
+  const [suggestionBoxVisible, setSuggestionBoxVisible] =
+    useState<boolean>(false);
 
-  const changeSearchInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+  const changeSearchInputValue = async (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     OpenSuggestionBox();
     setSearchKeyword(inputValue);
     setFocusIndex(-1);
     if (isolatedKoreanCharacterValidator(inputValue)) return;
-    getSuggestionApi(inputValue)
-      .then((response) => setSuggestions(response.data))
-      .catch((error) => console.log(error));
+    //====
+    // 캐시에서 데이터 조회
+    const cachedData = cacheContextValue?.get(searchKeyword);
+
+    if (cachedData) {
+      console.info("Data found in cache");
+      return { data: cachedData };
+    } else {
+      const response = await getSuggestionApi(searchKeyword);
+      const data = response.data;
+      cacheContextValue?.set(searchKeyword, data);
+      setSuggestions(data);
+    }
   };
 
   const startSearch = (e: FormEvent<HTMLFormElement>) => {
@@ -27,6 +50,9 @@ const SearchBar = () => {
     if (searchKeyword === "") return alert("검색어를 입력하세요.");
     alert(`검색: ${searchKeyword}`);
     setSearchKeyword("");
+    setFocusIndex(-1);
+    CloseSuggestionBox();
+    setSuggestions([]);
   };
 
   const clearSerchKeyword = () => {
@@ -35,9 +61,6 @@ const SearchBar = () => {
     CloseSuggestionBox();
     setSuggestions([]);
   };
-
-  const [suggestionBoxVisible, setSuggestionBoxVisible] =
-    useState<boolean>(false);
 
   const OpenSuggestionBox = () => {
     setSuggestionBoxVisible(true);
