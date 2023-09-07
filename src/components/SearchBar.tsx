@@ -3,6 +3,7 @@ import {
   FormEvent,
   KeyboardEvent,
   useContext,
+  // useRef,
   useState,
 } from "react";
 import { styled } from "styled-components";
@@ -23,6 +24,7 @@ const SearchBar = () => {
   const [focusIndex, setFocusIndex] = useState<number>(-1);
   const [suggestionBoxVisible, setSuggestionBoxVisible] =
     useState<boolean>(false);
+  // const noResultCountRef = useRef(0);
 
   const changeSearchInputValue = async (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -30,10 +32,10 @@ const SearchBar = () => {
     setSearchKeyword(inputValue);
     setFocusIndex(-1);
     if (isolatedKoreanCharacterValidator(inputValue)) return;
-    //====
-    // 캐시에서 데이터 조회
+    // console.log(inputValue,suggestions.length,'몇번',noResultCountRef.current);
+    // if(noResultCountRef.current > 5) return;
+    //========
     const cachedData = cacheContextValue?.get(inputValue);
-
     if (cachedData) {
       console.info("Data found in cache");
       setSuggestions(cachedData);
@@ -43,6 +45,7 @@ const SearchBar = () => {
       cacheContextValue?.set(inputValue, data);
       setSuggestions(data);
     }
+    //========
   };
 
   const startSearch = (e: FormEvent<HTMLFormElement>) => {
@@ -60,13 +63,10 @@ const SearchBar = () => {
   };
 
   const moveFocus = (e: KeyboardEvent<HTMLInputElement>) => {
-    // IME 입력 처리 중인지 확인
-    if (e.key === "Process" || e.code === "Process") {
-      return; // IME 입력 처리 중이면 아무 작업도 하지 않음
-    }
-
     switch (e.code) {
       case "ArrowUp":
+        if (e.key === "Process") break;
+        if (suggestions.length === 0) break;
         if (focusIndex <= 0) {
           setFocusIndex(suggestions.length - 1);
           setSearchKeyword(suggestions[suggestions.length - 1].sickNm);
@@ -76,6 +76,8 @@ const SearchBar = () => {
         }
         break;
       case "ArrowDown":
+        if (e.key === "Process") break;
+        if (suggestions.length === 0) break;
         if (focusIndex >= suggestions.length - 1) {
           setFocusIndex(0);
           setSearchKeyword(suggestions[0].sickNm);
@@ -88,6 +90,12 @@ const SearchBar = () => {
         setSuggestionBoxVisible(false);
         setFocusIndex(0);
         break;
+      // case "Backspace":
+      //   noResultCountRef.current -= 1
+      //   break;
+      // default:
+      //   suggestions.length === 0 ? noResultCountRef.current += 1 : noResultCountRef.current = 0
+      //   break;
       default:
         break;
     }
@@ -100,12 +108,21 @@ const SearchBar = () => {
           type="text"
           value={searchKeyword}
           onChange={changeSearchInputValue}
-          onFocus={()=>setSuggestionBoxVisible(true)}
+          onFocus={() => setSuggestionBoxVisible(true)}
           // onBlur={CloseSuggestionBox}
           onKeyDown={moveFocus}
           placeholder="질환명을 입력해 주세요."
         />
-        <SearchButton type="submit"><svg viewBox="0 0 16 16" fill="currentColor" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.56 0a6.56 6.56 0 015.255 10.49L16 14.674 14.675 16l-4.186-4.184A6.56 6.56 0 116.561 0zm0 1.875a4.686 4.686 0 100 9.372 4.686 4.686 0 000-9.372z"/></svg></SearchButton>
+        <SearchButton type="submit">
+          <svg
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6.56 0a6.56 6.56 0 015.255 10.49L16 14.674 14.675 16l-4.186-4.184A6.56 6.56 0 116.561 0zm0 1.875a4.686 4.686 0 100 9.372 4.686 4.686 0 000-9.372z" />
+          </svg>
+        </SearchButton>
         <ClearButton onClick={clearSerchKeyword}>x</ClearButton>
         {suggestionBoxVisible ? (
           <SuggestionBox focusIndex={focusIndex} suggestions={suggestions} />
