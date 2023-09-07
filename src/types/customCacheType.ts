@@ -7,6 +7,4 @@ export interface Cache {
 export interface CacheContextValue {
   set: (key: string, value: Suggestions, ttl?: number) => void;
   get: (key: string) => Suggestions | null;
-  remove: (key: string) => void;
-  clear: () => void;
 }
