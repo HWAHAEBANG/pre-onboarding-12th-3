@@ -6,13 +6,13 @@
 
 ### ❓ 진행과정
 
-    ✅ 1. 매 주 멘토님 또는 참여 기업으로부터 과제를 부여받습니다.
+    1. 매 주 멘토님 또는 참여 기업으로부터 과제를 부여받습니다.
 
-    ✅ 2. 모든 팀원은 각자 자신의 스타일로 코드를 작성합니다.
+    2. 모든 팀원은 각자 자신의 스타일로 코드를 작성합니다.
 
-    ✅ 3. 서로의 코드를 리뷰하는 과정을 거치며, 본인의 코드를 동료에게 이해하기 쉽게 설명하고, 타인의 코드를 이해하는 과정을 경험합니다.
+    3. 서로의 코드를 리뷰하는 과정을 거치며, 본인의 코드를 동료에게 이해하기 쉽게 설명하고, 타인의 코드를 이해하는 과정을 경험합니다.
 
-    ✅ 4. 기능별로 가장 효율적이라고 판단되는 코드를 Best Practice로 선정하여 최종 결과물에 반영합니다.
+    4. 기능별로 가장 효율적이라고 판단되는 코드를 Best Practice로 선정하여 최종 결과물에 반영합니다.
 
 ### 💡 목적
 
@@ -37,7 +37,8 @@
 
 
 ### 👀 미리보기 
-![Alt text](image.png)
+![image](https://github.com/HWAHAEBANG/pre-onboarding-12th-3/assets/101491870/a0da10eb-04a7-46de-95a0-4652d35d283c)
+
 
 ### ▶️ 실행 방법
 
@@ -85,7 +86,7 @@ export const isolatedKoreanCharacterValidator = (searchKeyword: string) => {
   return isolatedKoreanCharacterRegex.test(searchKeyword);
 };
 ```
-![Alt text](image-2.png)
+![image](https://github.com/HWAHAEBANG/pre-onboarding-12th-3/assets/101491870/b1759a73-41a9-468c-8fec-bce0f2346cfe)
 
 #### ✅ 경우 2. 입력된 문자가 없는 경우 (모두 지웠을 경우)
 - 모든 입력이 지워진 상태에서도 API요청이 발생합니다. 이 부분을 예외처리 하면 불필요한 요청을 줄이는 효과와 더불어, 빈 문자열을 파라미터로 전송 시 모든 데이터들을 반환해 주는 문제를 보완해 줄 수 있습니다.
