@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const instance = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "https://vercel-json-server-snowy.vercel.app",
   timeout: 4000,
   headers: {
     "Access-Control-Allow-Credentials": "true",
