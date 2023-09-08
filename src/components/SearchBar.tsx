@@ -3,7 +3,6 @@ import {
   FormEvent,
   KeyboardEvent,
   useContext,
-  // useRef,
   useState,
 } from "react";
 import { styled } from "styled-components";
@@ -13,6 +12,7 @@ import SuggestionBox from "../components/SuggestionBox";
 import { Suggestions } from "../types/searchType";
 import { CacheContextValue } from "../types/customCacheType";
 import { CustomCacheContext } from "../contexts/customCacheContext";
+import {ReadingGlasses} from '../assets'
 
 const SearchBar = () => {
   const cacheContextValue = useContext<CacheContextValue | undefined>(
@@ -24,7 +24,6 @@ const SearchBar = () => {
   const [focusIndex, setFocusIndex] = useState<number>(-1);
   const [suggestionBoxVisible, setSuggestionBoxVisible] =
     useState<boolean>(false);
-  // const noResultCountRef = useRef(0);
 
   const changeSearchInputValue = async (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -32,8 +31,6 @@ const SearchBar = () => {
     setSearchKeyword(inputValue);
     setFocusIndex(-1);
     if (isolatedKoreanCharacterValidator(inputValue)) return;
-    // console.log(inputValue,suggestions.length,'몇번',noResultCountRef.current);
-    // if(noResultCountRef.current > 5) return;
     //========
     const cachedData = cacheContextValue?.get(inputValue);
     if (cachedData) {
@@ -90,12 +87,6 @@ const SearchBar = () => {
         setSuggestionBoxVisible(false);
         setFocusIndex(0);
         break;
-      // case "Backspace":
-      //   noResultCountRef.current -= 1
-      //   break;
-      // default:
-      //   suggestions.length === 0 ? noResultCountRef.current += 1 : noResultCountRef.current = 0
-      //   break;
       default:
         break;
     }
@@ -109,19 +100,12 @@ const SearchBar = () => {
           value={searchKeyword}
           onChange={changeSearchInputValue}
           onFocus={() => setSuggestionBoxVisible(true)}
-          // onBlur={CloseSuggestionBox}
+          // onBlur={() => clearSerchKeyword()}
           onKeyDown={moveFocus}
           placeholder="질환명을 입력해 주세요."
         />
         <SearchButton type="submit">
-          <svg
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M6.56 0a6.56 6.56 0 015.255 10.49L16 14.674 14.675 16l-4.186-4.184A6.56 6.56 0 116.561 0zm0 1.875a4.686 4.686 0 100 9.372 4.686 4.686 0 000-9.372z" />
-          </svg>
+          <ReadingGlasses/>
         </SearchButton>
         <ClearButton onClick={clearSerchKeyword}>x</ClearButton>
         {suggestionBoxVisible ? (
