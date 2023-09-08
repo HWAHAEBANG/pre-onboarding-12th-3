@@ -41,7 +41,7 @@
 
 ### ▶️ 실행 방법
 
-- 배포 링크: [http://pre-onboarding-12th-2.s3-website.ap-northeast-2.amazonaws.com](http://pre-onboarding-12th-3.s3-website.ap-northeast-2.amazonaws.com/)
+- 배포 링크: [https://pre-onboarding-12th-3-1w4xs9yjv-pre-onboarding-12th-1team.vercel.app](https://pre-onboarding-12th-3-1w4xs9yjv-pre-onboarding-12th-1team.vercel.app)
 - 링크가 실행되지 않는 경우 아래 명령어를 차례대로 입력하여 실행해주세요.
 - 서버와 클라이언트 두 가지 앱을 모두 실행해야 정상 작동 됩니다.
 
