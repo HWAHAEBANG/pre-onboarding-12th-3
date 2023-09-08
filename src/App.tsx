@@ -24,7 +24,14 @@ function App() {
     if (cachedItem && Date.now() < cachedItem.expireTime) {
       return cachedItem.value;
     }
+    remove(key);
     return null;
+  };
+
+    const remove = (key: string) => {
+    const updatedCache = { ...cache };
+    delete updatedCache[key];
+    setCache(updatedCache);
   };
 
   const cacheContextValue = {
